@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.Assert;
+
 public class Main {
     
     public static void main(String[] args) throws IOException {
@@ -162,6 +164,25 @@ public class Main {
         value.add("1");
         cti.setOutput(value.get(0));
         cai = new CodeAnalyzerImpl();
+        tests.add(cti);        
+        
+        cti = new CodeTestImpl();
+        cti.setName("test9");
+        cti.setCode(cci.getLinesOfCode());
+        type = new ArrayList<Class>();
+        type.add(Integer.class);
+        cti.setInputTypes(type);
+        value = new ArrayList<Object>();
+        value.add(1);
+        cti.setInputs(value);
+        cti.setMethodUnderTest(cci.findMethods().get(1));
+        type = new ArrayList<Class>();
+        type.add(String.class);
+        cti.setOutputType(type.get(0));
+        value = new ArrayList<Object>();
+        value.add("1");
+        cti.setOutput(value.get(0));
+        cai = new CodeAnalyzerImpl();
         tests.add(cti);
         
         Set<CodeLine> coverage = cai.runTestSuite(tests);
@@ -172,6 +193,13 @@ public class Main {
             
             System.out.println(""+(coverage.contains(cl)? "**":"--")+cl.getLineNumber()+" - "+cl.getContents());
         }
+        
+        Set<CodeTest> tests2 = cai.uniqueTests(tests);
+        
+        System.out.println("Number of redundant tests = " + (tests.size() - tests2.size()));
+
+     
+        
    }
 
 }
