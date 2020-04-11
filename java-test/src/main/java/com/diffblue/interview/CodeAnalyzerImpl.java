@@ -28,11 +28,33 @@ public class CodeAnalyzerImpl implements CodeAnalyzer{
         }
         return covered;
     }
+    
+    @Override
+    public Set<CodeTest> uniqueTests(Set<CodeTest> tests) {
+        Set<CodeLine> covered = new HashSet<CodeLine>();
+        Set<CodeTest> unique = new HashSet<CodeTest>();
+        int runningSize = 0;
+        for (CodeTest test : tests) {
+            CodeTestImpl testTemp = (CodeTestImpl)test;
 
+            covered.addAll(simpleRunner(testTemp));
+            if (covered.size() > runningSize) {
+                unique.add(test);
+            }
+            runningSize = covered.size();
+        }
+        return unique;
+    }
+    
     private static final int COMMAND = 0;
     private static final int EXPRESSION = 1;
     private static final int FOLLOWING_BRACKET = 2;
 
+    /**
+     * Understands if, else if, else, default and return no nesting
+     * @param test
+     * @return
+     */
     protected Set<CodeLine> simpleRunner(CodeTestImpl test){
         List<CodeLine> lines = test.getCode();
         int index = test.getMethodUnderTest().getStart();
@@ -142,6 +164,12 @@ public class CodeAnalyzerImpl implements CodeAnalyzer{
 
     }
 
+    /**
+     * if ( expression ) {
+     * @param codeLine
+     * @param i
+     * @return
+     */
     protected List<String> getCommand(CodeLine codeLine, int i) {
         List<String> listArray = new ArrayList<String>();
         String line = codeLine.getContents();
@@ -197,24 +225,18 @@ public class CodeAnalyzerImpl implements CodeAnalyzer{
         return listArray;
     }
 
+    /**
+     * increments i until character is none whitespace
+     * @param codeLine
+     * @param i
+     * @return
+     */
     protected int skipBeginning(CodeLine codeLine, int i) {
-        while(i < codeLine.getContents().length() && (codeLine.getContents().charAt(i) == '\t' || codeLine.getContents().charAt(i) == ' '))i++;
+        while(i < codeLine.getContents().length() 
+                && (codeLine.getContents().charAt(i) == '\t' 
+                || codeLine.getContents().charAt(i) == ' '))i++;
         return i;
     }
 
-    @Override
-    public Set<CodeTest> uniqueTests(Set<CodeTest> tests) {
-        Set<CodeLine> covered = new HashSet<CodeLine>();
-        Set<CodeTest> unique = new HashSet<CodeTest>();
-        int runningSize = 0;
-        for (CodeTest test : tests) {
-            CodeTestImpl testTemp = (CodeTestImpl)test;
 
-            covered.addAll(simpleRunner(testTemp));
-            if (covered.size() > runningSize) {
-                unique.add(test);
-            }
-            runningSize = covered.size();
-        }
-        return unique;    }
 }

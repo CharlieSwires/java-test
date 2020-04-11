@@ -7,13 +7,11 @@ public class CodeLineImpl implements CodeLine {
     
     @Override
     public int getLineNumber() {
-        // TODO Auto-generated method stub
         return getNumber();
     }
 
     @Override
     public String getContents() {
-        // TODO Auto-generated method stub
         return getLine();
     }
 

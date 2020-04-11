@@ -21,7 +21,6 @@ public class CodeTestImpl implements CodeTest{
 
     @Override
     public Set<CodeLine> getCoveredLines() {
-        // TODO Auto-generated method stub
         return this.coveredLines;
     }
 

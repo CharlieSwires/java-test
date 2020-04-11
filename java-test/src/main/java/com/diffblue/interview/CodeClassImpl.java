@@ -20,18 +20,16 @@ public class CodeClassImpl implements CodeClass{
 
     @Override
     public List<CodeLine> getLinesOfCode() {
-        // TODO Auto-generated method stub
         return getLines();
     }
 
     @Override
     public File getFile() {
-        // TODO Auto-generated method stub
         return getFile();
     }
 
 
-    public List<CodeLine> getLines() {
+    private List<CodeLine> getLines() {
         return this.lines;
     }
 
@@ -43,6 +41,11 @@ public class CodeClassImpl implements CodeClass{
         this.file = file;
     }
 
+    /**
+     * 
+     * @param fnam
+     * @throws IOException
+     */
     public CodeClassImpl(String fnam) throws IOException {
         this.file = new File(fnam);
         this.lines = new ArrayList<CodeLine>();
@@ -73,6 +76,10 @@ public class CodeClassImpl implements CodeClass{
     public static final int START = 0;
     public static final int END = 1;
 
+    /**
+     * finds all the public and protected methods with line ranges
+     * @return
+     */
     public List<CodeMethod> findMethods() {
         List<CodeMethod> results = new ArrayList<CodeMethod>();;
         for(CodeLine cl : getLines()) {
@@ -97,6 +104,11 @@ public class CodeClassImpl implements CodeClass{
 
     }
 
+    /**
+     * string (parameters...) throw Exception {
+     * @param lineNo
+     * @return
+     */
     public List<String>[] getTokens(int lineNo) {
         String preOpenBracket = "";
         String betweenBrackets = "";
@@ -169,6 +181,12 @@ public class CodeClassImpl implements CodeClass{
         return listArray;
     }
 
+    /**
+     * string (parameters...) {
+     * 
+     * @param lineNo
+     * @return
+     */
     public boolean getFunctionSignature(int lineNo) {
         boolean openBracket = false;
         boolean closedBracket = false;
